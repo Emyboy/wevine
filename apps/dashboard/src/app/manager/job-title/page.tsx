@@ -1,16 +1,17 @@
-import { SkillDataList } from '@/types/option.types'
+import { JobTitleData } from '@/types/option.types'
+import { CRUDPageProps, QueryPaginationResponse } from '@/types/page.types'
+import { BACKEND_URL } from '@/utils/CONSTANTS'
+import { cookies } from 'next/headers'
 import React from 'react'
 import dynamic from 'next/dynamic'
-import { cookies } from 'next/headers'
-import { BACKEND_URL } from '@/utils/CONSTANTS'
-import { CRUDPageProps } from '@/types/page.types'
-
 const DefaultLayout = dynamic(
 	() => import('@/components/layouts/DefaultLayout'),
 )
-const SkillsPage = dynamic(() => import('@/components/pages/skills/SkillsPage'))
+const JobTitlePage = dynamic(
+	() => import('@/components/pages/JobTitle/JobTitlePage'),
+)
 
-export default async function _page(props: CRUDPageProps) {
+export default async function page(props: CRUDPageProps) {
 	const { searchParams } = props
 
 	let { sortBy, limit, sortOrder, q, page } = searchParams
@@ -24,22 +25,22 @@ export default async function _page(props: CRUDPageProps) {
 	const cookieStore = cookies()
 	const we_auth = cookieStore.get('we_auth')
 
-	let res = await fetch(BACKEND_URL + `/skill/all/${query}`, {
+	let res = await fetch(BACKEND_URL + `/job-title/all/${query}`, {
 		headers: {
 			Authorization: `Bearer ${we_auth}`,
 		},
 	})
 	let data = await res.json()
 
-	let skills: SkillDataList = data
+	let dataList: QueryPaginationResponse<JobTitleData> = data
 
 	return (
-		<DefaultLayout title="Skills" name="skills">
-			<SkillsPage
-				dataList={skills}
+		<DefaultLayout name="job-title" title="Job Title">
+			<JobTitlePage
+				dataList={dataList}
 				count={limit}
-				currentPage={skills.currentPage}
-				totalPages={skills.totalPages}
+				currentPage={dataList.currentPage}
+				totalPages={dataList.totalPages}
 			/>
 		</DefaultLayout>
 	)

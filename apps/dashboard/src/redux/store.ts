@@ -16,6 +16,7 @@ import { setupListeners } from '@reduxjs/toolkit/dist/query'
 import { authApi } from './services/auth.services'
 import { userApi } from './services/user.services'
 import { skillApi } from './services/skill.services'
+import { jobTitleApi } from './services/job-title.services'
 
 
 const persistConfig = {
@@ -38,13 +39,19 @@ export const store = configureStore({
 		[authApi.reducerPath]: authApi.reducer,
 		[userApi.reducerPath]: userApi.reducer,
 		[skillApi.reducerPath]: skillApi.reducer,
+		[jobTitleApi.reducerPath]: jobTitleApi.reducer,
 	},
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware({
 			serializableCheck: {
 				ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
 			},
-		}).concat([authApi.middleware, userApi.middleware, skillApi.middleware]),
+		}).concat([
+			authApi.middleware,
+			userApi.middleware,
+			skillApi.middleware,
+			jobTitleApi.middleware,
+		]),
 })
 
 setupListeners(store.dispatch)

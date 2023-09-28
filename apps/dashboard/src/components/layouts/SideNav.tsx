@@ -75,11 +75,20 @@ export default function SideNav({ activePage }: Props) {
 					</EachNavSection>
 					<EachNavSection title="Clients">
 						<EachNav onClick={() => {}} title="Overview" Icon={HiChartBar} />
-						<EachNav onClick={() => {}} title="Projects" Icon={HiDocumentText} />
+						<EachNav
+							onClick={() => {}}
+							title="Projects"
+							Icon={HiDocumentText}
+						/>
 						<EachNav onClick={() => {}} title="Invoices" Icon={HiNewspaper} />
 					</EachNavSection>
 					<EachNavSection title="Content">
-						<EachNav onClick={() => {}} title="Job Titles" Icon={HiBookmark} />
+						<EachNav
+							onClick={() => router.push(`/manager/job-title`)}
+							title="Job Titles"
+							Icon={HiBookmark}
+							active={activePage === 'job-title'}
+						/>
 						<EachNav
 							onClick={() => router.push('/manager/skills')}
 							title="Skills"
@@ -141,7 +150,7 @@ export default function SideNav({ activePage }: Props) {
 					</Box>
 				</Flex>
 			</Flex>
-			<Show below='md'>
+			<Show below="md">
 				<Box
 					bg="green.900"
 					left={0}

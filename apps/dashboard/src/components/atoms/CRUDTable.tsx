@@ -14,6 +14,17 @@ import {
 } from 'react-icons/hi2'
 import { DebounceInput } from 'react-debounce-input'
 
+export interface CRUDTablePageProps<T> {
+	dataList: {
+		results: T[]
+		currentPage?: number
+		totalPages?: number
+	}
+	count?: string
+	currentPage?: number
+	totalPages?: number
+	page?: number
+}
 
 type TableItem = {
 	type: 'text' | 'badge'

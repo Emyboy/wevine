@@ -1,5 +1,5 @@
 'use client'
-import CRUDTable from '@/components/atoms/CRUDTable'
+import CRUDTable, { CRUDTablePageProps } from '@/components/atoms/CRUDTable'
 import { SkillData, SkillDataList } from '@/types/option.types'
 import React, { useEffect, useState } from 'react'
 import { HiPencil } from 'react-icons/hi2'
@@ -9,21 +9,11 @@ import { Tooltip } from '@chakra-ui/react'
 import SkillActionButtons from './SkillActionButtons'
 import { useRouter } from 'next/navigation'
 
-type Props = {
-	skillListData: SkillDataList
-	count?: string
-	currentPage?: number
-	totalPages?: number
-}
+interface Props extends CRUDTablePageProps<SkillData> {}
 
 export default function SkillsPage(props: Props) {
-	const {
-		skillListData,
-		count,
-		currentPage: page,
-		totalPages: pageTotal,
-	} = props
-	const skills = skillListData.results
+	const { dataList, count, currentPage: page, totalPages: pageTotal } = props
+	const skills = dataList.results
 	const [_skills, setSkills] = useState<SkillData[]>([])
 	const [showAdd, setShowAdd] = useState(false)
 	const [selectedSkill, setSelectedSkill] = useState(null)
@@ -57,8 +47,6 @@ export default function SkillsPage(props: Props) {
 			? `/manager/skills/${queryURL}&${queryStr}`
 			: `/manager/skills/?${queryStr}`
 
-		// console.log('THE QUERY URL --', fullQueryURL, page)
-
 		router.push(fullQueryURL)
 	}, [queryURL, limit, searchQuery, currentPage])
 
@@ -72,8 +60,6 @@ export default function SkillsPage(props: Props) {
 			setCurrentPage(page)
 		}
 	}, [pageTotal, page])
-
-	// console.log('SKILL PAGE --', { page, pageTotal })
 
 	return (
 		<div>
@@ -170,4 +156,5 @@ export default function SkillsPage(props: Props) {
 	)
 }
 
-export const dynamic = 'force-dynamic'
+
+// export const dynamic = 'force-dynamic'

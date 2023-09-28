@@ -1,14 +1,24 @@
-export interface SkillData {
+export interface OptionData {
 	_id: string
 	name: string
-	icon_url: string
-	slug: string
 	createdAt: string
 	updatedAt: string
+	slug: string
 }
 
+export interface SkillData extends OptionData {
+	icon_url: string
+}
+
+
+//! Delete this
 export interface SkillDataList {
-	currentPage: 1
-	totalPages: 24
+	currentPage: number
+	totalPages: number
 	results: SkillData[]
+}
+
+
+export interface JobTitleData extends OptionData {
+	description: string
 }
