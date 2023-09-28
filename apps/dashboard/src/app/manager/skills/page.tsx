@@ -1,53 +1,56 @@
-import DefaultLayout from '@/components/layouts/DefaultLayout'
-import SkillsPage from '@/components/pages/skills/SkillsPage'
-import { APICall } from '@/utils/api.utils'
+// import DefaultLayout from '@/components/layouts/DefaultLayout'
+// import SkillsPage from '@/components/pages/skills/SkillsPage'
+import { SkillDataList } from '@/types/option.types'
 import React from 'react'
-import { Suspense } from 'react'
+import dynamic from 'next/dynamic'
+import { cookies } from 'next/headers'
+import { BACKEND_URL } from '@/utils/CONSTANTS'
 
-export const dynamic = 'force-dynamic'
-export const dynamicParams = true
-export default async function page({
-	searchParams,
-}: {
-	searchParams: { sortOrder: string; limit: string; sortBy: string; q: string | null }
-}) {
-	let { sortBy, limit, sortOrder, q } = searchParams
+const DefaultLayout = dynamic(
+	() => import('@/components/layouts/DefaultLayout'),
+)
+const SkillsPage = dynamic(() => import('@/components/pages/skills/SkillsPage'))
 
-	let searchQuery = q ? `&q=${q}`: ''
-
-	let query = !sortBy
-		? `?limit=${limit || 10}${searchQuery}`
-		: `?sortBy=${sortBy}&sortOrder=${sortOrder}${searchQuery}&limit=${
-				limit || 10
-		  }`
-
-	console.log('THE PARAMS --', {
-		sortBy,
-		limit,
-		sortOrder,
-	})
-	console.log('THE QUERY --', query)
-
-	const getAllSkills = async () => {
-		try {
-			const res = await APICall({
-				route: `/skill/all${query ? query : ''}`,
-				isAuth: true,
-			})
-			return res.data
-		} catch (error) {
-			throw new Error('Failed to fetch data')
-		}
+export default async function _page(props: {
+	searchParams: {
+		sortOrder: string
+		limit: string
+		sortBy: string
+		q: string | null
+		page: string | null
 	}
+}) {
+	const { searchParams } = props
 
-	let skills = await getAllSkills()
+	let { sortBy, limit, sortOrder, q, page } = searchParams
 
+	let sort = sortBy ? `sortBy=${sortBy}` : ''
+	let order = sortOrder ? `sortBy=${sortOrder}` : ''
+	let search = q ? `&q=${q}` : ''
+	let limited = limit ? `limit=${limit}` : ''
+	let pageCount = page ? `&page=${page}` : ''
+	let query = `?${sort}&${order}${search}&${limited}&${pageCount}`
+
+	const cookieStore = cookies()
+	const we_auth = cookieStore.get('we_auth')
+
+	let res = await fetch(BACKEND_URL + `/skill/all${query ? query : ''}`, {
+		headers: {
+			Authorization: `Bearer ${we_auth}`,
+		},
+	})
+	let data = await res.json()
+
+	let skills: SkillDataList = data
 
 	return (
 		<DefaultLayout title="Skills" name="skills">
-			<Suspense fallback={<p>Loading feed...</p>}>
-				<SkillsPage skillListData={skills} count={limit} />
-			</Suspense>
+			<SkillsPage
+				skillListData={skills}
+				count={limit}
+				currentPage={skills.currentPage}
+				totalPages={skills.totalPages}
+			/>
 		</DefaultLayout>
 	)
 }

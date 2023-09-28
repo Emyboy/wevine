@@ -11,50 +11,69 @@ import { useRouter } from 'next/navigation'
 
 type Props = {
 	skillListData: SkillDataList
-	count?: string;
+	count?: string
+	currentPage?: number
+	totalPages?: number
 }
 
 export default function SkillsPage(props: Props) {
-	const { skillListData, count } = props;
-	const skills = skillListData.results;
+	const {
+		skillListData,
+		count,
+		currentPage: page,
+		totalPages: pageTotal,
+	} = props
+	const skills = skillListData.results
 	const [_skills, setSkills] = useState<SkillData[]>([])
 	const [showAdd, setShowAdd] = useState(false)
 	const [selectedSkill, setSelectedSkill] = useState(null)
 	const router = useRouter()
-	const [limit, setLimit] = useState<string | null>(count ? count: null)
-	const [searchQuery, setSearchQuery] = useState('');
+	const [limit, setLimit] = useState<string | null>(count ? count : null)
+	const [searchQuery, setSearchQuery] = useState('')
+
+	const [currentPage, setCurrentPage] = useState(1)
+	const [totalPages, setTotalPages] = useState(1)
 
 	const [queryURL, setQueryURL] = useState<string | null>(null)
 
 	useEffect(() => {
-		// Build an array of query parameters
 		const queryParams = []
 
-		// Add search query to queryParams if it exists
 		if (searchQuery) {
 			queryParams.push(`q=${encodeURIComponent(searchQuery)}`)
 		}
 
-		// Add limit to queryParams if it exists
+		if (currentPage && currentPage > 1) {
+			queryParams.push(`page=${currentPage}`)
+		}
+
 		if (limit) {
 			queryParams.push(`limit=${limit}`)
 		}
 
-		// Combine queryParams into a single string
 		const queryStr = queryParams.join('&')
 
-		// Construct the full query URL
 		const fullQueryURL = queryURL
 			? `/manager/skills/${queryURL}&${queryStr}`
 			: `/manager/skills/?${queryStr}`
 
-		// Navigate to the constructed URL
+		// console.log('THE QUERY URL --', fullQueryURL, page)
+
 		router.push(fullQueryURL)
-	}, [queryURL, limit, searchQuery])
+	}, [queryURL, limit, searchQuery, currentPage])
 
 	useEffect(() => {
 		setSkills(skills || [])
 	}, [skills])
+
+	useEffect(() => {
+		if (page && pageTotal) {
+			setTotalPages(pageTotal)
+			setCurrentPage(page)
+		}
+	}, [pageTotal, page])
+
+	// console.log('SKILL PAGE --', { page, pageTotal })
 
 	return (
 		<div>
@@ -77,7 +96,10 @@ export default function SkillsPage(props: Props) {
 				/>
 			)}
 			<CRUDTable
-				onSearch={q => setSearchQuery(q)}
+				currentPage={currentPage}
+				totalPages={totalPages}
+				onPageChange={(p) => setCurrentPage(p)}
+				onSearch={(q) => setSearchQuery(q)}
 				defaultCount={limit || 10}
 				onLimitSelect={(limit) => setLimit(limit)}
 				columns={[
@@ -115,7 +137,12 @@ export default function SkillsPage(props: Props) {
 							style: { minWidth: '150px' },
 							label: 'name',
 						},
-						{ type: 'text', value: skill.slug, label: 'slug' },
+						{
+							type: 'text',
+							value: skill.slug,
+							label: 'slug',
+							style: { minWidth: '150px' },
+						},
 						{
 							type: 'text',
 							value: moment(skill.createdAt).fromNow(),

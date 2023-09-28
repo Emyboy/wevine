@@ -1,7 +1,19 @@
-import { Flex, HStack, Select, Spinner } from '@chakra-ui/react'
+import {
+	Button,
+	Flex,
+	HStack,
+	Select,
+	Spinner,
+	Tooltip,
+} from '@chakra-ui/react'
 import React from 'react'
-import { HiMagnifyingGlass } from 'react-icons/hi2'
+import {
+	HiChevronLeft,
+	HiChevronRight,
+	HiMagnifyingGlass,
+} from 'react-icons/hi2'
 import { DebounceInput } from 'react-debounce-input'
+import { current } from '@reduxjs/toolkit'
 
 type TableItem = {
 	type: 'text' | 'badge'
@@ -33,6 +45,9 @@ type Props = {
 	onLimitSelect?: (limit: string) => void
 	defaultCount?: number | string
 	onSearch?: (searchQuery: string) => void
+	currentPage?: number
+	totalPages?: number
+	onPageChange?: (page: number) => void
 }
 
 export default function CRUDTable({
@@ -45,8 +60,12 @@ export default function CRUDTable({
 	isLoading,
 	onLimitSelect,
 	defaultCount,
-	onSearch
+	onSearch,
+	currentPage,
+	totalPages,
+	onPageChange,
 }: Props) {
+	// console.log('CRUD TABLE', { currentPage, totalPages })
 	return (
 		<div className="row">
 			<div className="col-lg-12">
@@ -182,7 +201,7 @@ export default function CRUDTable({
 								gap={6}
 							>
 								<Select
-									w="130px"
+									w="100px"
 									size={'sm'}
 									alignSelf={'flex-end'}
 									onChange={(e) =>
@@ -195,12 +214,27 @@ export default function CRUDTable({
 									<option value="50">50</option>
 									<option value="100">100</option>
 								</Select>
-								<div className="d-flex justify-content-end mt-3">
-									<div className="pagination-wrap hstack gap-2 d-flex">
-										<a className="page-item pagination-prev disabled" href="#">
-											Previous
-										</a>
-										<ul className="pagination listjs-pagination mb-0">
+								<div className="d-flex justify-content-end mt-5">
+									{currentPage && totalPages && (
+										<div className="pagination-wrap hstack gap-2 d-flex">
+											<Tooltip hasArrow label="Previous Page" placement="top">
+												<Button
+													size="sm"
+													colorScheme="green"
+													color="theme"
+													className="page-item pagination-prev d-flex align-items-center gap-2"
+													variant={'ghost'}
+													isDisabled={currentPage === 1}
+													onClick={() =>
+														onPageChange
+															? onPageChange(currentPage - 1)
+															: () => {}
+													}
+												>
+													<HiChevronLeft /> Previous
+												</Button>
+											</Tooltip>
+											{/* <ul className="pagination listjs-pagination mb-0">
 											<li className="active">
 												<a className="page" href="#" data-i="1" data-page="8">
 													1
@@ -211,11 +245,28 @@ export default function CRUDTable({
 													2
 												</a>
 											</li>
-										</ul>
-										<a className="page-item pagination-next" href="#">
-											Next
-										</a>
-									</div>
+										</ul> */}
+											<Tooltip hasArrow label="Next Page" placement="top">
+												<Button
+													size="sm"
+													colorScheme="green"
+													color="theme"
+													className="page-item pagination-prev d-flex align-items-center gap-2"
+													variant={'ghost'}
+													isDisabled={
+														totalPages === 1 || totalPages === currentPage
+													}
+													onClick={() =>
+														onPageChange
+															? onPageChange(currentPage + 1)
+															: () => {}
+													}
+												>
+													Next <HiChevronRight />
+												</Button>
+											</Tooltip>
+										</div>
+									)}
 								</div>
 							</HStack>
 						)}

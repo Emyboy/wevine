@@ -16,10 +16,11 @@ import {
 	HiCircleStack,
 	HiStar,
 } from 'react-icons/hi2'
-import { Avatar, Box, Flex, Text } from '@chakra-ui/react'
+import { Avatar, Box, Flex, Show, Text } from '@chakra-ui/react'
 import { useRouter } from 'next/navigation'
 import { useSelector } from 'react-redux'
 import { AppStore } from '@/types/store.types'
+import Link from 'next/link'
 
 type Props = {
 	activePage: string
@@ -32,21 +33,17 @@ export default function SideNav({ activePage }: Props) {
 	return (
 		<>
 			<Flex
+				zIndex={'overlay'}
 				flexDirection={'column'}
 				id="scrollbar"
 				className="h-100 simplebar-scrollable-y"
 			>
 				<Box mb={'20px'} p="4">
-					<a href="index.html" className="logo logo-dark">
-						<span className="logo-lg">
-							{/* <img
-												src="assets/images/logo-dark.png"
-												alt=""
-												height="17"
-											/> */}
+					<Link href="/" className="logo logo-dark">
+						<span className="logo-lg-">
 							<h1 className="text-white fw-bold">WeVine</h1>
 						</span>
-					</a>
+					</Link>
 				</Box>
 				<Flex
 					flexDirection={'column'}
@@ -67,7 +64,7 @@ export default function SideNav({ activePage }: Props) {
 						<EachNav onClick={() => {}} title="Payments" Icon={HiWallet} />
 						<EachNav
 							onClick={() => {}}
-							title="Messages"
+							title="Discussions"
 							Icon={HiChatBubbleOvalLeft}
 						/>
 						<EachNav
@@ -78,8 +75,8 @@ export default function SideNav({ activePage }: Props) {
 					</EachNavSection>
 					<EachNavSection title="Clients">
 						<EachNav onClick={() => {}} title="Overview" Icon={HiChartBar} />
-						<EachNav onClick={() => {}} title="Project" Icon={HiDocumentText} />
-						<EachNav onClick={() => {}} title="Invoice" Icon={HiNewspaper} />
+						<EachNav onClick={() => {}} title="Projects" Icon={HiDocumentText} />
+						<EachNav onClick={() => {}} title="Invoices" Icon={HiNewspaper} />
 					</EachNavSection>
 					<EachNavSection title="Content">
 						<EachNav onClick={() => {}} title="Job Titles" Icon={HiBookmark} />
@@ -144,6 +141,18 @@ export default function SideNav({ activePage }: Props) {
 					</Box>
 				</Flex>
 			</Flex>
+			<Show below='md'>
+				<Box
+					bg="green.900"
+					left={0}
+					position={'fixed'}
+					top={0}
+					right={0}
+					bottom={0}
+					zIndex={-1}
+					opacity={0.4}
+				/>
+			</Show>
 		</>
 	)
 }
