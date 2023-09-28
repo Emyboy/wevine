@@ -13,7 +13,7 @@ import {
 	HiMagnifyingGlass,
 } from 'react-icons/hi2'
 import { DebounceInput } from 'react-debounce-input'
-import { current } from '@reduxjs/toolkit'
+
 
 type TableItem = {
 	type: 'text' | 'badge'

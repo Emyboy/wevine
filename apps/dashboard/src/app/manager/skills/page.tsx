@@ -25,16 +25,15 @@ export default async function _page(props: {
 	let { sortBy, limit, sortOrder, q, page } = searchParams
 
 	let sort = sortBy ? `sortBy=${sortBy}` : ''
-	let order = sortOrder ? `sortBy=${sortOrder}` : ''
-	let search = q ? `&q=${q}` : ''
-	let limited = limit ? `limit=${limit}` : ''
+	let order = sortOrder ? `&sortOrder=${sortOrder}` : ''
+	let limited = limit ? `&limit=${limit}` : ''
 	let pageCount = page ? `&page=${page}` : ''
-	let query = q ? `?q=${q}`: `?${sort}&${order}&${limited}&${pageCount}`
+	let query = q ? `?q=${q}` : `?${sort}${order}${limited}${pageCount}`
 
 	const cookieStore = cookies()
 	const we_auth = cookieStore.get('we_auth')
 
-	let res = await fetch(BACKEND_URL + `/skill/all${query ? query : ''}`, {
+	let res = await fetch(BACKEND_URL + `/skill/all/${query}`, {
 		headers: {
 			Authorization: `Bearer ${we_auth}`,
 		},
