@@ -29,7 +29,7 @@ export default async function _page(props: {
 	let search = q ? `&q=${q}` : ''
 	let limited = limit ? `limit=${limit}` : ''
 	let pageCount = page ? `&page=${page}` : ''
-	let query = `?${sort}&${order}${search}&${limited}&${pageCount}`
+	let query = q ? `?q=${q}`: `?${sort}&${order}&${limited}&${pageCount}`
 
 	const cookieStore = cookies()
 	const we_auth = cookieStore.get('we_auth')
