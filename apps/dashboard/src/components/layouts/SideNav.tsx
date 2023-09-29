@@ -53,7 +53,7 @@ export default function SideNav({ activePage }: Props) {
 					pb="10"
 					px="4"
 				>
-					<EachNavSection title="Pages">
+					{/* <EachNavSection title="Pages">
 						<EachNav
 							onClick={() => router.push('/')}
 							title="Overview"
@@ -72,8 +72,8 @@ export default function SideNav({ activePage }: Props) {
 							title="Notifications"
 							Icon={HiMiniBell}
 						/>
-					</EachNavSection>
-					<EachNavSection title="Clients">
+					</EachNavSection> */}
+					{/* <EachNavSection title="Clients">
 						<EachNav onClick={() => {}} title="Overview" Icon={HiChartBar} />
 						<EachNav
 							onClick={() => {}}
@@ -81,7 +81,7 @@ export default function SideNav({ activePage }: Props) {
 							Icon={HiDocumentText}
 						/>
 						<EachNav onClick={() => {}} title="Invoices" Icon={HiNewspaper} />
-					</EachNavSection>
+					</EachNavSection> */}
 					<EachNavSection title="Content">
 						<EachNav
 							onClick={() => router.push(`/manager/job-title`)}

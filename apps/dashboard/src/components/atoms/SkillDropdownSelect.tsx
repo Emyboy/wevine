@@ -6,6 +6,7 @@ import AsyncDropdownSelect, {
 import { SkillData } from '@/types/option.types'
 import { APICall } from '@/utils/api.utils'
 import { HiOutlineXMark } from 'react-icons/hi2'
+import WBadge from './WBadge'
 
 type Props = {}
 
@@ -56,33 +57,9 @@ export default function SkillDropdownSelect({}: Props) {
 	return (
 		<Box position={'relative'}>
 			<Flex gap={3} flexWrap={'wrap'} mb={selectedTitle.length > 0 ? '3' : '0'}>
-				{selectedTitle.map((item) => {
+				{selectedTitle.map((item, i) => {
 					return (
-						<Flex
-							rounded="lg"
-							bg="theme_lighter"
-							alignItems={'center'}
-							fontSize={'sm'}
-							color="theme"
-							overflow={'hidden'}
-						>
-							<Box p="2px" flex={1}>
-								{item.label}
-							</Box>
-							<Flex
-								alignItems={'center'}
-								justifyContent={'center'}
-								w="5"
-								h="full"
-								cursor={'pointer'}
-								_hover={{
-									bg: 'theme',
-									color: 'theme_lighter',
-								}}
-							>
-								<HiOutlineXMark />
-							</Flex>
-						</Flex>
+						<WBadge key={`badge-${i}`} label={item.label}  />
 					)
 				})}
 			</Flex>

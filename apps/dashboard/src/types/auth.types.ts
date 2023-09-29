@@ -6,6 +6,11 @@ export interface AuthUser {
 	account_status: UserAccountStatus
 	bio: string | null
 	username: string
+	_id: string
+	avatar_url?: string
+	createdAt: string
+	updatedAt: string
+	phone_number: string
 }
 
 export interface AuthUserInfo {

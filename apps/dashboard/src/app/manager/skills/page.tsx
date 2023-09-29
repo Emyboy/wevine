@@ -4,10 +4,9 @@ import dynamic from 'next/dynamic'
 import { cookies } from 'next/headers'
 import { BACKEND_URL } from '@/utils/CONSTANTS'
 import { CRUDPageProps } from '@/types/page.types'
+import DefaultLayout from '@/components/layouts/DefaultLayout'
 
-const DefaultLayout = dynamic(
-	() => import('@/components/layouts/DefaultLayout'),
-)
+
 const SkillsPage = dynamic(() => import('@/components/pages/skills/SkillsPage'))
 
 export default async function _page(props: CRUDPageProps) {

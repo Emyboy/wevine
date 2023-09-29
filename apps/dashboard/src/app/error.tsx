@@ -1,6 +1,5 @@
 'use client'
 import DefaultLayout from '@/components/layouts/DefaultLayout'
-import { Button, Flex, Text, VStack } from '@chakra-ui/react'
 import React from 'react'
 
 export default function error() {
@@ -10,19 +9,31 @@ export default function error() {
 
 	return (
 		<DefaultLayout name="error" title="error">
-			<Flex h="90vh" justifyContent={'center'} alignItems={'center'}>
-				<VStack gap={4}>
-					<VStack gap={2}>
-						<Text fontSize={'32px'}>Application Error</Text>
-						<Text fontSize={'150px'} fontWeight={'bold'}>
-							500
-						</Text>
-					</VStack>
-					<Button bg="black" colorScheme='black' color={'white'} onClick={retry}>
-						Reload
-					</Button>
-				</VStack>
-			</Flex>
+					<div className="container-fluid">
+						<div className="row justify-content-center">
+							<div className="text-center">
+								<div className="error-500 position-relative">
+									<img
+										src="/assets/images/error500.png"
+										alt=""
+										className="img-fluid error-500-img error-img"
+									/>
+									<h1 className="title text-muted">500</h1>
+								</div>
+								<div>
+									<h4>Internal Server Error!</h4>
+									<p className="text-muted w-75 mx-auto">
+										Server Error 500. We're not exactly sure what happened, but
+										our servers say something is wrong.
+									</p>
+									<button className="btn btn-success" onClick={retry}>
+										Reload
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				
 		</DefaultLayout>
 	)
 }

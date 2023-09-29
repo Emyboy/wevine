@@ -4,9 +4,7 @@ import { BACKEND_URL } from '@/utils/CONSTANTS'
 import { cookies } from 'next/headers'
 import React from 'react'
 import dynamic from 'next/dynamic'
-const DefaultLayout = dynamic(
-	() => import('@/components/layouts/DefaultLayout'),
-)
+import DefaultLayout from '@/components/layouts/DefaultLayout'
 const JobTitlePage = dynamic(
 	() => import('@/components/pages/JobTitle/JobTitlePage'),
 )
@@ -24,10 +22,12 @@ export default async function page(props: CRUDPageProps) {
 
 	const cookieStore = cookies()
 	const we_auth = cookieStore.get('we_auth')
+	console.log('TOKEN --', we_auth)
+
 
 	let res = await fetch(BACKEND_URL + `/job-title/all/${query}`, {
 		headers: {
-			Authorization: `Bearer ${we_auth}`,
+			Authorization: `Bearer ${we_auth?.value}`,
 		},
 	})
 	let data = await res.json()

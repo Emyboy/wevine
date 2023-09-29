@@ -16,15 +16,21 @@ type Props = {
 	onChange: (query: string) => void
 }
 
-export default function AsyncDropdownSelect({ onChange, data, isLoading, onSelect }: Props) {
+export default function AsyncDropdownSelect({
+	onChange,
+	data,
+	isLoading,
+	onSelect,
+	value,
+}: Props) {
 	const [queryText, setQueryText] = useState('')
-    const [options, setOptions] = useState<AsyncDropdownSelectData[]>([])
+	const [options, setOptions] = useState<AsyncDropdownSelectData[]>([])
+	const [dropdown, setDropdown] = useState(false)
 
 	useEffect(() => {
 		let timeoutId: NodeJS.Timeout | null = null
 
-
-		if (queryText ) {
+		if (queryText) {
 			if (timeoutId) {
 				clearTimeout(timeoutId)
 			}
@@ -32,9 +38,9 @@ export default function AsyncDropdownSelect({ onChange, data, isLoading, onSelec
 			timeoutId = setTimeout(() => {
 				onChange(queryText)
 			}, 500)
-		}else {
-            onChange('')
-        }
+		} else {
+			onChange('')
+		}
 
 		return () => {
 			if (timeoutId) {
@@ -43,12 +49,16 @@ export default function AsyncDropdownSelect({ onChange, data, isLoading, onSelec
 		}
 	}, [onChange, queryText])
 
-    useEffect(() => {
-        // if(data && data.length > 0){
-            setOptions(data)
-        // }
-    },[data])
+	useEffect(() => {
+		setOptions(data)
+		if (data && data.length > 0 && options.length > 0) {
+			setDropdown(true)
+		} else {
+			setDropdown(false)
+		}
+	}, [data, options])
 
+	
 	return (
 		<Box position={'relative'}>
 			<Flex
@@ -71,7 +81,7 @@ export default function AsyncDropdownSelect({ onChange, data, isLoading, onSelec
 					</Flex>
 				)}
 			</Flex>
-			{options && options.length ? (
+			{dropdown && (
 				<Box
 					rounded="md"
 					minH={'100px'}
@@ -107,7 +117,7 @@ export default function AsyncDropdownSelect({ onChange, data, isLoading, onSelec
 						)
 					})}
 				</Box>
-			):null}
+			)}
 		</Box>
 	)
 }
